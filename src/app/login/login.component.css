@@ -1,0 +1,15 @@
+.login-bg {
+  background-position: center;
+  background-size: cover;
+}
+
+.login-box {
+  padding: 20px;
+}
+
+.title-text {
+  text-align: end;
+  padding: 0;
+  margin: 0;
+  font-weight: 300;
+}

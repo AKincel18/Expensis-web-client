@@ -1,0 +1,88 @@
+<div class="container-fluid login-bg  full-height " [ngClass]="bgClass">
+  <section class="login container full-height">
+    <div class="row justify-content-center align-items-center full-height">
+      <div class="col-12 col-sm-8 login-box position-relative">
+        <h1 class="title-text">
+          Expensis.
+        </h1>
+        <mat-tab-group [(selectedIndex)]="currentTabIdx" dynamicHeight="true">
+          <mat-tab label="Login">
+            <div fxLayout="column" fxLayoutAlign="start stretch">
+              <mat-form-field>
+                <input matInput type="text" placeholder="Email" [(ngModel)]="login.email" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput type="password" placeholder="Password" [(ngModel)]="login.password" />
+              </mat-form-field>
+
+              <button color="primary" mat-raised-button (click)="submitLogin()">Submit</button>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Registration">
+            <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="registerForm">
+
+              <mat-form-field>
+                <input matInput type="text" placeholder="Email" formControlName="email" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <input
+                  matInput
+                  type="password"
+                  placeholder="Password"
+                  formControlName="password"
+                  [errorStateMatcher]="passwordsMatcher"
+                />
+                <mat-hint>
+                  Min. 5 characters, digit and special sign.
+                </mat-hint>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input
+                  matInput
+                  type="password"
+                  placeholder="Confirm Password"
+                  formControlName="cofirmationPassword"
+                  [errorStateMatcher]="passwordsMatcher"
+                />
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Birth date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthDate" (click)="picker.open()" [min]="minDate" [max]="maxDate"
+                >
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select placeholder="Gender" formControlName="gender">
+                  <mat-option [value]="'F'">
+                    Female
+                  </mat-option>
+                  <mat-option [value]="'M'">
+                    Male
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button color="primary" [disabled]="registerForm.invalid" mat-raised-button (click)="submitRegister()">
+                Register
+              </button>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </section>
+
+  <!-- 
+    Photo by Engin Akyurt from Pexels
+    
+    Photo by Startup Stock Photos from Pexels
+    
+    -->
+</div>
