@@ -3,6 +3,8 @@ export interface RegisterRequest {
   email: string;
   password: string;
   gender: 'F' | 'M';
-  birthDate: Date;
-  monthlyLimit: number;
+  birth_date: Date;
+  monthly_limit: number;
+  income_range: number;
+  username: string;
 }

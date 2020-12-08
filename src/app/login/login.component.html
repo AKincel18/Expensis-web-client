@@ -52,7 +52,7 @@
 
               <mat-form-field>
                 <mat-label>Birth date</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="birthDate" (click)="picker.open()" [min]="minDate" [max]="maxDate"
+                <input matInput [matDatepicker]="picker" formControlName="birth_date" (click)="picker.open()" [min]="minDate" [max]="maxDate"
                 >
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -67,6 +67,18 @@
                     Male
                   </mat-option>
                 </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-select placeholder="Income range" formControlName="income_range">
+                  <mat-option *ngFor='let scope of incomeRanges$ | async' [value]="scope.id">
+                    {{ scope.fromTo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput type="number" placeholder="Monthly limit" formControlName='monthly_limit' />
               </mat-form-field>
 
               <button color="primary" [disabled]="registerForm.invalid" mat-raised-button (click)="submitRegister()">

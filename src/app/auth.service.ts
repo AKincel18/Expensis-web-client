@@ -48,7 +48,7 @@ export class AuthService {
   public login(email: string, password: string) {
     this.http
       .post(
-        'https://localhost:5001/api/token',
+        'http://localhost:5001/api/token',
         {
           Email: email,
           Password: password,
@@ -77,8 +77,11 @@ export class AuthService {
   }
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void) {
+    const dateString = `${registerForm.birth_date.getFullYear()}-${registerForm.birth_date.getMonth()}-${registerForm.birth_date.getDate()}`;
+    registerForm.birth_date = dateString as any;
+    registerForm.username = registerForm.email;
     this.http
-      .post('https://localhost:5001/api/users', registerForm)
+      .post('http://localhost:8000/users/', registerForm)
       .subscribe((res) => {
         this.snackBar.open('Registered succesfully!', null, {
           duration: 5000,

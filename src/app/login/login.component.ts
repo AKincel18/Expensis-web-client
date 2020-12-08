@@ -9,10 +9,14 @@ import {
   NgForm,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { flatMap, tap, catchError } from 'rxjs/operators';
+import { flatMap, tap, catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { RegisterRequest } from '../classes/register-request';
+import {
+  IncomeRangeOption,
+  IncomeRangeResponse,
+} from '../classes/income-range-response';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +34,17 @@ export class LoginComponent implements OnInit {
   currentTabIdx = 0;
   minDate = new Date(1900, 0, 0);
   maxDate = new Date();
+  incomeRanges$ = this.http.get('http://localhost:8000/income-ranges/').pipe(
+    map((ranges: IncomeRangeResponse[]) =>
+      ranges.map(
+        (r) =>
+          ({
+            id: r.id,
+            fromTo: `${r.range_from}-${r.range_to}`,
+          } as IncomeRangeOption)
+      )
+    )
+  );
 
   constructor(
     private http: HttpClient,
@@ -76,8 +91,10 @@ export class LoginComponent implements OnInit {
             Validators.pattern(/^(.+)@(.+)$/),
           ]),
         ],
-        birthDate: [null, Validators.required],
+        birth_date: [null, Validators.required],
         gender: [null, Validators.required],
+        income_range: [null, Validators.required],
+        monthly_limit: [null, Validators.compose([Validators.min(0)])],
       },
       { validator: RepeatPasswordValidator }
     );
