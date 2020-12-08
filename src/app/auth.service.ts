@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RegisterRequest } from './classes/register-request';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from './classes/user';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +15,14 @@ export class AuthService {
   private isLoggedIn = false;
   private loginRequest: LoginRequest;
   private user: User;
-  private token: string;
+  accessToken: string;
+  refreshToken: string;
   redirectUrl: string;
 
   private initService() {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-      this.loginByToken(token);
+    if (localStorage.getItem('accessToken')) {
+      const token = localStorage.getItem('accessToken');
+      //this.loginByToken(token);
     }
   }
 
@@ -32,13 +34,18 @@ export class AuthService {
     this.initService();
   }
 
-  private loginByToken(token: string) {
+  private loginByToken(response: {
+    access_token: string;
+    refresh_token: string;
+    user: User;
+  }) {
     const helper = new JwtHelperService();
-    const decodedToken = helper.decodeToken(token);
-    this.token = token;
-    this.user = decodedToken;
+    this.accessToken = response.access_token;
+    this.user = response.user;
+    this.refreshToken = response.refresh_token;
     this.isLoggedIn = true;
-    localStorage.setItem('token', token);
+    localStorage.setItem('accessToken', this.accessToken);
+    localStorage.setItem('refreshToken', this.refreshToken);
   }
 
   public checkLogin() {
@@ -47,33 +54,41 @@ export class AuthService {
 
   public login(email: string, password: string) {
     this.http
-      .post(
-        'http://localhost:5001/api/token',
-        {
-          Email: email,
-          Password: password,
-        },
-        {
-          responseType: 'text',
-        }
-      )
+      .post('http://localhost:8000/auth/', {
+        email: email,
+        password: password,
+      })
       .subscribe((res) => {
-        this.loginByToken(res);
+        this.loginByToken(res as any);
         if (this.redirectUrl) {
           this.router.navigate([this.redirectUrl]);
           this.redirectUrl = '';
         } else {
-          this.router.navigate(['/app/my-movies']);
+          this.router.navigate(['/app']);
         }
       });
   }
 
   public logout() {
-    this.token = null;
+    this.accessToken = null;
     this.user = null;
     this.isLoggedIn = false;
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  loginByRefreshToken() {
+    return this.http
+      .post('http://localhost:8000/refresh/', {
+        refresh_token: this.refreshToken,
+      })
+      .pipe(
+        tap((response) => {
+          const { access_token } = response as any;
+          this.accessToken = access_token;
+          localStorage.setItem('accessToken', this.accessToken);
+        })
+      );
   }
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void) {
@@ -95,6 +110,6 @@ export class AuthService {
   }
 
   getToken() {
-    return this.token;
+    return this.accessToken;
   }
 }
