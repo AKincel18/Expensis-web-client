@@ -12,3 +12,19 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 50px #333333 inset;
+  -webkit-text-fill-color: white;
+}
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 50px #333333 inset;
+  -webkit-text-fill-color: white;
+}
+
+.mat-snack-bar-container {
+  background: #333 !important;
+  .mat-simple-snackbar {
+    justify-content: center;
+  }
+}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LoginRequest } from './classes/login-request';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RegisterRequest } from './classes/register-request';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -58,15 +58,22 @@ export class AuthService {
         email: email,
         password: password,
       })
-      .subscribe((res) => {
-        this.loginByToken(res as any);
-        if (this.redirectUrl) {
-          this.router.navigate([this.redirectUrl]);
-          this.redirectUrl = '';
-        } else {
-          this.router.navigate(['/app']);
+      .subscribe(
+        (res) => {
+          this.loginByToken(res as any);
+          if (this.redirectUrl) {
+            this.router.navigate([this.redirectUrl]);
+            this.redirectUrl = '';
+          } else {
+            this.router.navigate(['/app']);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          this.snackBar.open(err.error.detail, null, {
+            duration: 5000,
+          });
         }
-      });
+      );
   }
 
   public logout() {
@@ -92,7 +99,9 @@ export class AuthService {
   }
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void) {
-    const dateString = `${registerForm.birth_date.getFullYear()}-${registerForm.birth_date.getMonth()}-${registerForm.birth_date.getDate()}`;
+    const dateString = `${registerForm.birth_date.getFullYear()}-${
+      registerForm.birth_date.getMonth() + 1
+    }-${registerForm.birth_date.getDate()}`;
     registerForm.birth_date = dateString as any;
     registerForm.username = registerForm.email;
     this.http

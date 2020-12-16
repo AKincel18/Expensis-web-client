@@ -20,7 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { TokenInterceptor } from './token.interceptor';
 
 @NgModule({
@@ -51,6 +51,7 @@ import { TokenInterceptor } from './token.interceptor';
       useClass: TokenInterceptor,
       multi: true,
     },
+    { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
   ],
   bootstrap: [AppComponent],
 })
