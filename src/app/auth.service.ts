@@ -7,6 +7,7 @@ import { RegisterRequest } from './classes/register-request';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from './classes/user';
 import { tap } from 'rxjs/operators';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -98,20 +99,45 @@ export class AuthService {
       );
   }
 
-  register(registerForm: RegisterRequest, changeIdxCbk: () => void) {
-    const dateString = `${registerForm.birth_date.getFullYear()}-${
-      registerForm.birth_date.getMonth() + 1
-    }-${registerForm.birth_date.getDate()}`;
+  register(registerForm: RegisterRequest, changeIdxCbk: () => void, controls: FormGroup["controls"]) {
+    const dateString = 
+     `${registerForm.birth_date.getFullYear()}-${
+       registerForm.birth_date.getMonth() + 1
+     }-${registerForm.birth_date.getDate()}`;
     registerForm.birth_date = dateString as any;
     registerForm.username = registerForm.email;
     this.http
       .post('http://localhost:8000/users/', registerForm)
-      .subscribe((res) => {
+      .subscribe(
+        (res) => {
         this.snackBar.open('Registered succesfully!', null, {
           duration: 5000,
         });
         changeIdxCbk();
-      });
+        this.clearFields(controls);
+      },
+        (err: HttpErrorResponse) =>  {
+            let response = err.error;
+            let msgError;
+            for (const prop of Object.keys(response) ) { 
+                msgError = response[prop];
+                break; //get first error
+            }
+            this.snackBar.open(msgError, null, {
+              duration: 5000,
+            });
+        }
+      );
+  }
+
+  private clearFields(controls: FormGroup["controls"]) {
+    controls["email"].reset();
+    controls["password"].reset();
+    controls["cofirmationPassword"].reset();
+    controls["birth_date"].reset();
+    controls["gender"].reset();
+    controls["income_range"].reset();
+    controls["monthly_limit"].reset();
   }
 
   getUserData() {

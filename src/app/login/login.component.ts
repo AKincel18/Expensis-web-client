@@ -59,9 +59,9 @@ export class LoginComponent implements OnInit {
   }
 
   submitRegister() {
-    const registerForm = this.registerForm.value as RegisterRequest;
+    const registerForm = this.registerForm.value as RegisterRequest;    
     const changeIndex = () => (this.currentTabIdx = 0);
-    this.authService.register(registerForm, changeIndex);
+    this.authService.register(registerForm, changeIndex, this.registerForm.controls);
   }
 
   ngOnInit() {
