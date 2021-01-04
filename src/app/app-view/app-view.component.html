@@ -1,3 +1,24 @@
-<router-outlet>
-    
-</router-outlet>
+<div fxLayout='column'>
+    <mat-toolbar fxLayout='row' fxLayoutAlign='space-between center'>
+        <div>
+            <h1> Expensis </h1>
+        </div>
+
+        <div>
+            <nav mat-tab-nav-bar>
+                <a [routerLink]="link.link"
+                routerLinkActive #rla="routerLinkActive"
+                [active]="rla.isActive" 
+                mat-tab-link *ngFor="let link of links"
+                   
+                > 
+                {{link.label}} 
+                </a>
+              </nav>
+        </div>
+    </mat-toolbar>
+
+    <router-outlet>
+        
+    </router-outlet>
+</div>

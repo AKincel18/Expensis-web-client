@@ -8,6 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppViewComponent implements OnInit {
   constructor(private http: HttpClient) {}
+  public links = [
+    { label: 'Statistics', link: 'statistics' },
+    { label: 'Expenses', link: 'expenses' },
+    { label: 'My profile', link: 'my-profile' },
+  ];
 
   ngOnInit(): void {
     this.http
