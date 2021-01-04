@@ -22,9 +22,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { TokenInterceptor } from './token.interceptor';
+import { ExpensesComponent } from './app-view/expenses/expenses.component';
+import { MyProfileComponent } from './app-view/my-profile/my-profile.component';
+import { StatisticsComponent } from './app-view/statistics/statistics.component';
 
 @NgModule({
-  declarations: [AppComponent, AppViewComponent, LoginComponent],
+  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
