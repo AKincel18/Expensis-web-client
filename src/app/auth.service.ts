@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from './classes/user';
 import { tap } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
+import { Utils } from './utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -100,11 +101,7 @@ export class AuthService {
   }
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void, controls: FormGroup["controls"]) {
-    const dateString = 
-     `${registerForm.birth_date.getFullYear()}-${
-       registerForm.birth_date.getMonth() + 1
-     }-${registerForm.birth_date.getDate()}`;
-    registerForm.birth_date = dateString as any;
+    registerForm.birth_date = Utils.parseDate(registerForm.birth_date);
     registerForm.username = registerForm.email;
     this.http
       .post('http://localhost:8000/users/', registerForm)
@@ -117,12 +114,7 @@ export class AuthService {
         this.clearFields(controls);
       },
         (err: HttpErrorResponse) =>  {
-            let response = err.error;
-            let msgError;
-            for (const prop of Object.keys(response) ) { 
-                msgError = response[prop];
-                break; //get first error
-            }
+            let msgError = Utils.getFirstError(err.error);
             this.snackBar.open(msgError, null, {
               duration: 5000,
             });
