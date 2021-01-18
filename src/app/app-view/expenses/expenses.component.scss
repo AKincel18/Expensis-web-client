@@ -1,0 +1,110 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse:separate; 
+    border-spacing:5em;
+  }
+
+td {
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding-right: 2em;
+}
+.mat-paginator {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  width: 50%;
+  margin-left: auto;
+  position: relative;
+  margin-right: auto;
+}
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.example-month-picker .mat-calendar-arrow {
+  display: none;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: #343a40;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  position: relative;
+}
+.example-element-detail p {
+  color: #c2c2c2;
+  font-weight: 500;
+  font-size: medium;
+}
+
+.value-field {
+  text-align: center;
+}
+
+
+td.value-field {
+  color: red;
+}
+
+.date-column {
+  width: 150px;
+}
+.category-column {
+  text-align: center;
+}
+
+.mat-form-field {
+  display: inline;
+}
+
+.details-buttons {
+  position:absolute;
+  bottom:0;
+  right:0;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+.details-buttons button {
+  margin-right: 5px;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.add-new-button {
+  float:right;
+  padding: 5px;
+  margin: 5px;
+}

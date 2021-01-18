@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { EndpointPaths } from '../endpoint-paths';
 
 @Component({
   selector: 'app-app-view',
@@ -16,7 +18,7 @@ export class AppViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.http
-      .get('http://localhost:8000/age-ranges/')
+      .get(environment.apiUrl + EndpointPaths.AGE_RANGES)
       .subscribe((res) => console.log(res));
   }
 }

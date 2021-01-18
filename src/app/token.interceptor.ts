@@ -6,38 +6,39 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { observable, Observable } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, switchMap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { EndpointPaths } from './endpoint-paths';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (
-      req.url.includes('register') ||
-      req.url.includes('auth') ||
-      req.url.includes('refresh')
+      req.url.includes(EndpointPaths.USERS) ||
+      req.url.includes(EndpointPaths.AUTH) ||
+      req.url.includes(EndpointPaths.REFRESH)
     ) {
       return next.handle(req);
     }
     const authReq = req.clone(
       this.authService.accessToken
         ? {
-            headers: req.headers.set(
-              'authorization',
-              'Token ' + this.authService.accessToken
-            ),
-          }
+          headers: req.headers.set(
+            'Authorization',
+            'Bearer ' + this.authService.accessToken
+          )
+        }
         : {}
     );
     return next.handle(authReq).pipe(
       catchError((error) => {
-        if (error.status != 401) {
+        if (error.status != 403) {
           throw error;
         }
 
@@ -49,17 +50,29 @@ export class TokenInterceptor implements HttpInterceptor {
         }
 
         return this.authService.loginByRefreshToken().pipe(
-          switchMap((response) => {
+          retry(1),
+          switchMap(() => {
             const authReqRep = req.clone({
               headers: req.headers.set(
-                'authorization',
-                'Token ' + this.authService.accessToken
+                'Authorization',
+                'Bearer ' + this.authService.accessToken
               ),
             });
             return next.handle(authReqRep);
-          })
+          }),
+          catchError(this.handleRefreshError)
         );
       })
     );
+  }
+
+  handleRefreshError(error) {
+    const refreshToken = this.authService.refreshToken;
+    const jwtHelper = new JwtHelperService();
+    if (jwtHelper.isTokenExpired(refreshToken)) {
+      this.authService.logout();
+      throw error;
+    }
+    return throwError(error.status);
   }
 }

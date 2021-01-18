@@ -9,7 +9,7 @@ import {
   NgForm,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { flatMap, tap, catchError, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { RegisterRequest } from '../classes/register-request';
@@ -17,6 +17,9 @@ import {
   IncomeRangeOption,
   IncomeRangeResponse,
 } from '../classes/income-range-response';
+import { environment } from 'src/environments/environment';
+import { EndpointPaths } from '../endpoint-paths';
+import { LocalStorageService as LocalStorage } from '../local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +37,7 @@ export class LoginComponent implements OnInit {
   currentTabIdx = 0;
   minDate = new Date(1900, 0, 0);
   maxDate = new Date();
-  incomeRanges$ = this.http.get('http://localhost:8000/income-ranges/').pipe(
+  incomeRanges$ = this.http.get(environment.apiUrl + EndpointPaths.INCOME_RANGES).pipe(
     map((ranges: IncomeRangeResponse[]) =>
       ranges.map(
         (r) =>
@@ -59,16 +62,21 @@ export class LoginComponent implements OnInit {
   }
 
   submitRegister() {
-    const registerForm = this.registerForm.value as RegisterRequest;    
+    const registerForm = this.registerForm.value as RegisterRequest;
     const changeIndex = () => (this.currentTabIdx = 0);
     this.authService.register(registerForm, changeIndex, this.registerForm.controls);
   }
 
   ngOnInit() {
-    this.generateForm();
-    this.backgroundIndex = Math.floor(Math.random() * 3 + 1);
-    this.bgClass = `login-bg-${this.backgroundIndex}`;
-    console.log(this.backgroundIndex);
+    if (LocalStorage.getAccessToken()) {
+      this.authService.loginByRefreshToken();
+      this.router.navigate(['/app']);
+    } else {
+      this.generateForm();
+      this.backgroundIndex = Math.floor(Math.random() * 3 + 1);
+      this.bgClass = `login-bg-${this.backgroundIndex}`;
+      console.log(this.backgroundIndex);
+    }
   }
 
   private generateForm() {
