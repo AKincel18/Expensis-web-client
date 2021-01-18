@@ -9,7 +9,7 @@ import { FormGroup } from '@angular/forms';
 import { environment } from '../environments/environment';
 import { EndpointPaths } from './endpoint-paths';
 import { LocalStorageService as LocalStorage } from './local-storage.service';
-
+import { Utils } from './utils/utils';
 @Injectable({
   providedIn: 'root',
 })
@@ -102,32 +102,23 @@ export class AuthService {
   }
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void, controls: FormGroup["controls"]) {
-    const dateString =
-      `${registerForm.birth_date.getFullYear()}-${registerForm.birth_date.getMonth() + 1
-      }-${registerForm.birth_date.getDate()}`;
-    registerForm.birth_date = dateString as any;
-    registerForm.username = registerForm.email;
+    
+    registerForm.birth_date = Utils.parseDate(registerForm.birth_date);    registerForm.username = registerForm.email;
     this.http
       .post(environment.apiUrl + EndpointPaths.USERS, registerForm)
       .subscribe(
         (res) => {
-          this.snackBar.open('Registered succesfully!', null, {
-            duration: 5000,
-          });
-          changeIdxCbk();
-          this.clearFields(controls);
-        },
-        (err: HttpErrorResponse) => {
-          let response = err.error;
-          let msgError;
-          for (const prop of Object.keys(response)) {
-            msgError = response[prop];
-            break; //get first error
-          }
-          this.snackBar.open(msgError, null, {
-            duration: 5000,
-          });
-        }
+        this.snackBar.open('Registered succesfully!', null, {
+          duration: 5000,
+        });
+        changeIdxCbk();
+        this.clearFields(controls);
+      },
+        (err: HttpErrorResponse) =>  {
+            let msgError = Utils.getFirstError(err.error);
+            this.snackBar.open(msgError, null, {
+              duration: 5000,
+            });        }
       );
   }
 
