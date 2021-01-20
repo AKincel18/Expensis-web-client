@@ -40,10 +40,11 @@ export class ExpensesComponent implements OnInit {
   pageEvent: PageEvent;
   titleFilter: string;
   titleFilterInputText: string;
-  date = new FormControl(moment());
+  dateFilter: Date = new Date();
+  dateFilterInput = new FormControl(moment());
   currentMonthString = "Current month";
   maxDate = new Date();
-  minDate = LocalStorage.getDateJoined();
+  minDate = LocalStorage.getUser().date_joined;
   expandedElement: Expense | null;
   expensesSum: number;
 
@@ -66,15 +67,13 @@ export class ExpensesComponent implements OnInit {
       this.paginatorConfig.pageIndex = event.pageIndex;
       this.paginatorConfig.pageSize = event.pageSize;
     }
-    var year = this.date.value.year()
-    var month = this.date.value.month() + 1
+    var year = this.dateFilter.getFullYear()
+    var month = this.dateFilter.getMonth() + 1
     this.getExpensesSum(year, month);
     this.expenseService.getExpensesList(this.paginatorConfig.pageSize, this.paginatorConfig.pageIndex + 1, year, month, this.titleFilter).subscribe(
       data => {
         this.expenses = data.body;
         this.isLoadingResults = false;
-        console.log(data);
-        console.log(data.headers.keys());
         this.paginatorConfig.maxItems = Number(data.headers.get('X-MAX-RESULTS'));
       },
       () => {
@@ -88,26 +87,27 @@ export class ExpensesComponent implements OnInit {
 
   filterExpenses() {
     this.titleFilter = this.titleFilterInputText;
+    this.dateFilter = this.dateFilterInput.value.toDate();
     this.paginatorConfig.pageIndex = 0;
     this.getPaginatedExpenses();
     var currentDate = new Date();
-    if (currentDate.getMonth() == this.date.value.month() && currentDate.getFullYear() == this.date.value.year()) {
+    if (currentDate.getMonth() == this.dateFilter.getMonth() && currentDate.getFullYear() == this.dateFilter.getFullYear()) {
       this.currentMonthString = "Current month";
     } else {
-      this.currentMonthString = this.monthNames[this.date.value.month()] + " " + this.date.value.year();
+      this.currentMonthString = this.monthNames[this.dateFilter.getMonth()] + " " + this.dateFilter.getFullYear();
     }
   }
 
   chosenYearHandler(normalizedYear: Moment) {
-    const ctrlValue = this.date.value;
+    const ctrlValue = this.dateFilterInput.value;
     ctrlValue.year(normalizedYear.year());
-    this.date.setValue(ctrlValue);
+    this.dateFilterInput.setValue(ctrlValue);
   }
 
   chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
-    const ctrlValue = this.date.value;
+    const ctrlValue = this.dateFilterInput.value;
     ctrlValue.month(normalizedMonth.month());
-    this.date.setValue(ctrlValue);
+    this.dateFilterInput.setValue(ctrlValue);
     datepicker.close();
   }
 

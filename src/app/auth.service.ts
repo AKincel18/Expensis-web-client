@@ -19,14 +19,13 @@ export class AuthService {
   accessToken: string;
   refreshToken: string;
   redirectUrl: string;
-  dateJoined: Date;
 
   private initService() {
     if (LocalStorage.getAccessToken()) {
       this.isLoggedIn = true;
       this.accessToken = LocalStorage.getAccessToken();
       this.refreshToken = LocalStorage.getRefreshToken();
-      this.dateJoined = new Date(LocalStorage.getDateJoined());
+      this.user = LocalStorage.getUser();
     }
   }
 
@@ -49,7 +48,7 @@ export class AuthService {
     this.isLoggedIn = true;
     LocalStorage.setAccessToken(this.accessToken);
     LocalStorage.setRefreshToken(this.refreshToken);
-    LocalStorage.setDateJoined(response.user['date_joined'])
+    LocalStorage.setUser(response.user)
   }
 
   public checkLogin() {
@@ -140,5 +139,9 @@ export class AuthService {
     controls["gender"].reset();
     controls["income_range"].reset();
     controls["monthly_limit"].reset();
+  }
+
+  getUserData() {
+    return this.user;
   }
 }

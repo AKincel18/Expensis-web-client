@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { User } from './classes/user';
 
 const ACCESS_TOKEN = 'accessToken';
 const REFRESH_TOKEN = 'refreshToken';
-const DATE_JOINED = 'dateJoined';
+const USER = 'user';
 
 @Injectable({
   providedIn: 'root'
@@ -29,13 +30,12 @@ export class LocalStorageService {
 
   }
 
-  public static getDateJoined() {
-    return localStorage.getItem(DATE_JOINED);
+  public static getUser(): User {
+    return JSON.parse(localStorage.getItem(USER)) as User;
 
   }
 
-  public static setDateJoined(dateJoined: string) {
-    localStorage.setItem(DATE_JOINED, dateJoined);
-
+  public static setUser(user: User) {
+    localStorage.setItem(USER, JSON.stringify(user));
   }
 }
