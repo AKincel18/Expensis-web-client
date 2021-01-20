@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { LoginRequest } from './classes/login-request';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { RegisterRequest } from './classes/register-request';
@@ -8,22 +6,26 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { User } from './classes/user';
 import { tap } from 'rxjs/operators';
 import { FormGroup } from '@angular/forms';
+import { environment } from '../environments/environment';
+import { EndpointPaths } from './endpoint-paths';
+import { LocalStorageService as LocalStorage } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private isLoggedIn = false;
-  private loginRequest: LoginRequest;
   private user: User;
   accessToken: string;
   refreshToken: string;
   redirectUrl: string;
 
   private initService() {
-    if (localStorage.getItem('accessToken')) {
-      const token = localStorage.getItem('accessToken');
-      //this.loginByToken(token);
+    if (LocalStorage.getAccessToken()) {
+      this.isLoggedIn = true;
+      this.accessToken = LocalStorage.getAccessToken();
+      this.refreshToken = LocalStorage.getRefreshToken();
+      this.user = LocalStorage.getUser();
     }
   }
 
@@ -40,13 +42,13 @@ export class AuthService {
     refresh_token: string;
     user: User;
   }) {
-    const helper = new JwtHelperService();
     this.accessToken = response.access_token;
     this.user = response.user;
     this.refreshToken = response.refresh_token;
     this.isLoggedIn = true;
-    localStorage.setItem('accessToken', this.accessToken);
-    localStorage.setItem('refreshToken', this.refreshToken);
+    LocalStorage.setAccessToken(this.accessToken);
+    LocalStorage.setRefreshToken(this.refreshToken);
+    LocalStorage.setUser(response.user)
   }
 
   public checkLogin() {
@@ -55,7 +57,7 @@ export class AuthService {
 
   public login(email: string, password: string) {
     this.http
-      .post('http://localhost:8000/auth/', {
+      .post(environment.apiUrl + EndpointPaths.AUTH, {
         email: email,
         password: password,
       })
@@ -81,51 +83,50 @@ export class AuthService {
     this.accessToken = null;
     this.user = null;
     this.isLoggedIn = false;
-    localStorage.removeItem('token');
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 
   loginByRefreshToken() {
     return this.http
-      .post('http://localhost:8000/refresh/', {
+      .post(environment.apiUrl + EndpointPaths.REFRESH, {
         refresh_token: this.refreshToken,
       })
       .pipe(
         tap((response) => {
           const { access_token } = response as any;
           this.accessToken = access_token;
-          localStorage.setItem('accessToken', this.accessToken);
+          LocalStorage.setAccessToken(this.accessToken);
         })
       );
   }
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void, controls: FormGroup["controls"]) {
-    const dateString = 
-     `${registerForm.birth_date.getFullYear()}-${
-       registerForm.birth_date.getMonth() + 1
-     }-${registerForm.birth_date.getDate()}`;
+    const dateString =
+      `${registerForm.birth_date.getFullYear()}-${registerForm.birth_date.getMonth() + 1
+      }-${registerForm.birth_date.getDate()}`;
     registerForm.birth_date = dateString as any;
     registerForm.username = registerForm.email;
     this.http
-      .post('http://localhost:8000/users/', registerForm)
+      .post(environment.apiUrl + EndpointPaths.USERS, registerForm)
       .subscribe(
         (res) => {
-        this.snackBar.open('Registered succesfully!', null, {
-          duration: 5000,
-        });
-        changeIdxCbk();
-        this.clearFields(controls);
-      },
-        (err: HttpErrorResponse) =>  {
-            let response = err.error;
-            let msgError;
-            for (const prop of Object.keys(response) ) { 
-                msgError = response[prop];
-                break; //get first error
-            }
-            this.snackBar.open(msgError, null, {
-              duration: 5000,
-            });
+          this.snackBar.open('Registered succesfully!', null, {
+            duration: 5000,
+          });
+          changeIdxCbk();
+          this.clearFields(controls);
+        },
+        (err: HttpErrorResponse) => {
+          let response = err.error;
+          let msgError;
+          for (const prop of Object.keys(response)) {
+            msgError = response[prop];
+            break; //get first error
+          }
+          this.snackBar.open(msgError, null, {
+            duration: 5000,
+          });
         }
       );
   }
@@ -142,9 +143,5 @@ export class AuthService {
 
   getUserData() {
     return this.user;
-  }
-
-  getToken() {
-    return this.accessToken;
   }
 }

@@ -1,1 +1,92 @@
-<p>expenses works!</p>
+<section class="text-center container">
+  <div class="row py-lg-5">
+    <div class="col-lg-6 col-lg-6 mx-auto">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input type="text" matInput [(ngModel)]="titleFilterInputText">
+            <mat-icon matSuffix>title</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="outline">
+            <mat-label>Choose month</mat-label>
+            <input matInput [matDatepicker]="dp" [formControl]="dateFilterInput" [min]="minDate" [max]="maxDate"
+              readonly="readonly">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker" disabled="false">
+            </mat-datepicker>
+          </mat-form-field>
+
+        </div>
+      </div>
+      <button (click)="filterExpenses()" mat-raised-button color="primary">Filter</button>
+    </div>
+  </div>
+  <h2>{{currentMonthString}} total expenses: <span style="color: red"> {{expensesSum}} </span></h2>
+</section>
+
+<div class="mat-elevation-z8">
+  <div class="example-loading-shade" *ngIf="isLoadingResults">
+    <mat-spinner *ngIf="isLoadingResults" [color]='warn'></mat-spinner>
+  </div>
+  <button mat-raised-button color="primary" class="add-new-button">
+    Add new expense <mat-icon>add</mat-icon>
+  </button>
+  <div>
+    <table mat-table [dataSource]="expenses" multiTemplateDataRows>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef class="date-column"> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'yyyy-MM-dd' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Title </th>
+        <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef class="category-column"> Category </th>
+        <td mat-cell *matCellDef="let element" class="category-column"> {{element.category}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef class="value-field"> Value </th>
+        <td mat-cell *matCellDef="let element" class="value-field"> - {{element.value}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+            <p>Title: {{element.title}} <br> </p>
+            <p>Description: {{element.description}}</p>
+            <p>Creation date: {{element.date}}</p>
+            <p>Category: {{element.category}}</p>
+            <p>Value: - {{element.value}}</p>
+            <div class="details-buttons">
+              <button mat-raised-button style="background-color: #4CAF50;">Edit</button>
+              <button mat-raised-button color="warn" (click)="onDeletePressed(element.id)">Delete</button>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+    </table>
+
+
+
+    <mat-paginator [pageIndex]="paginatorConfig.pageIndex" [pageSize]="paginatorConfig.pageSize"
+      [pageSizeOptions]="paginatorConfig.pageSizeOptions" [length]="paginatorConfig.maxItems"
+      (page)="pageEvent = getPaginatedExpenses($event)" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>
