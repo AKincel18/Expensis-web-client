@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row" *ngIf="statisticsService.statistics$ | async as stats ; else : noData" >
+        <ngx-charts-bar-vertical-2d style="fill: #ffffff;"
+            [schemeType]="'ordinal'"
+            [results]="stats.data"
+            [gradient]="false"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="true"
+            [legendPosition]="'bottom'"
+            [showXAxisLabel]="false"
+            [showYAxisLabel]="false"
+            [trimXAxisTicks]=false
+        >
+        </ngx-charts-bar-vertical-2d>
+    </div>
+    <ng-template #noData>
+        <div class="row">
+            No data
+        </div>
+    </ng-template>
+</div>

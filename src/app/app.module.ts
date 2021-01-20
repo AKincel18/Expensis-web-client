@@ -25,9 +25,23 @@ import { TokenInterceptor } from './token.interceptor';
 import { ExpensesComponent } from './app-view/expenses/expenses.component';
 import { MyProfileComponent } from './app-view/my-profile/my-profile.component';
 import { StatisticsComponent } from './app-view/statistics/statistics.component';
+import { StatisticsHeaderComponent } from './app-view/statistics/statistics-header/statistics-header.component';
+import { StatisticsChartsComponent } from './app-view/statistics/statistics-charts/statistics-charts.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
-  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent],
+  declarations: [
+    AppComponent,
+    AppViewComponent,
+    LoginComponent,
+    ExpensesComponent,
+    MyProfileComponent,
+    StatisticsComponent,
+    StatisticsHeaderComponent,
+    StatisticsChartsComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -47,6 +61,9 @@ import { StatisticsComponent } from './app-view/statistics/statistics.component'
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatCheckboxModule,
+    NgxChartsModule,
+    MatRadioModule,
   ],
   providers: [
     {
