@@ -28,7 +28,7 @@ import { Utils } from "../utils/utils";
         requestBody.username = editUserRequest.email;
         requestBody.password = password;
       }
-      
+      requestBody.birth_date = Utils.parseDate(requestBody.birth_date);
       this.http
       .put(environment.apiUrl + EndpointPaths.USERS, requestBody)
       .subscribe(

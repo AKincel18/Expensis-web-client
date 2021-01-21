@@ -3,9 +3,10 @@ import { FormGroup } from "@angular/forms";
 export abstract class Utils {         
 
     public static parseDate(date: Date): any {
-        return `${date.getFullYear()}-${
-          date.getMonth() + 1
-        }-${date.getDate()}`;
+        let toDate = new Date(date.toString());
+        return `${toDate.getFullYear()}-${
+            toDate.getMonth() + 1
+        }-${toDate.getDate()}`;
     }
 
     public static parseDateToString(date: Date) : string{
@@ -15,6 +16,7 @@ export abstract class Utils {
         let day = myDate.getDate();
         let monthString = ((month >= 10) ? month.toString() : `0${month.toString()}`);
         let dayString = ((day >= 10) ? day.toString() : `0${day.toString()}`);
+
         return `${dayString}.${monthString}.${yearString}`;
     }
 

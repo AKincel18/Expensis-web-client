@@ -44,7 +44,7 @@ export class MyProfileComponent implements OnInit {
   }
   private setFields() {
     this.myProfileForm.controls["email"].setValue(this.loggedUser.email);
-    this.myProfileForm.controls["birth_date"].setValue(this.loggedUser.birth_date);
+    this.myProfileForm.controls["birth_date"].setValue(new Date(this.loggedUser.birth_date.toString()));
     this.myProfileForm.controls["gender"].setValue(this.loggedUser.gender);
     this.myProfileForm.controls["income_range"].setValue(this.loggedUser.income_range);
     this.myProfileForm.controls["monthly_limit"].setValue(this.loggedUser.monthly_limit);
