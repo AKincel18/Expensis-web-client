@@ -13,6 +13,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteExpenseDialogComponent } from './dialogs/delete-expense-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {LocalStorageService as LocalStorage} from '../../local-storage.service'
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-expenses',
@@ -25,6 +38,9 @@ import {LocalStorageService as LocalStorage} from '../../local-storage.service'
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  providers: [
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+  ]
 })
 export class ExpensesComponent implements OnInit {
   monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

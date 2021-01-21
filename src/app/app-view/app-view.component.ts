@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { MatTabLink, MatTabNav } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -10,6 +11,9 @@ import { AuthService } from '../auth.service';
 export class AppViewComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
+  
+  @ViewChild(MatTabNav) matTabNav: MatTabNav;
+  @ViewChildren(MatTabLink) linkElements: QueryList<MatTabLink>;
 
   public links = [
     { label: 'Statistics', link: 'statistics' },

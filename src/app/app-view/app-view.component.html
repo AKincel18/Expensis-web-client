@@ -5,20 +5,19 @@
         </div>
 
         <div>
-
             <nav mat-tab-nav-bar>
                 <a [routerLink]="link.link" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive"
                     mat-tab-link *ngFor="let link of links">
                     {{link.label}}
                 </a>
-                <button class="clear-border" mat-button [matMenuTriggerFor]="menu" >My profile</button>
-                <mat-menu #menu="matMenu" >
-                    <a [routerLink]="myProfileLink" 
-                        mat-tab-link="link">
+                <a [routerLink]="" [matMenuTriggerFor]="menu" mat-tab-link routerLinkActive #rla="routerLinkActive"
+                    [active]="rla.isActive">My profile</a>
+                <mat-menu #menu="matMenu">
+                    <a mat-menu-item hidden="true"></a> <!-- empty item prevents first item highlight -->
+                    <a mat-menu-item [routerLink]="myProfileLink" mat-tab-link="link">
                         Edit profile
                     </a>
-                    <a  mat-tab-link="link" 
-                        (click)="onLogoutClicked()">
+                    <a mat-menu-item mat-tab-link="link" (click)="onLogoutClicked()">
                         Log out
                     </a>
                 </mat-menu>
