@@ -2,8 +2,11 @@ import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
+import { environment } from "src/environments/environment";
 import { EditUserRequest } from "../classes/my-profile-request";
 import { User } from "../classes/user";
+import { EndpointPaths } from "../endpoint-paths";
+import { LocalStorageService } from "../local-storage.service";
 import { Utils } from "../utils/utils";
 
 @Injectable({
@@ -20,15 +23,14 @@ import { Utils } from "../utils/utils";
     
     editProfile(loggedUser: User, editUserRequest: EditUserRequest, password: string) {
       this.loggedUser = loggedUser;
-      this.editUserRequest = editUserRequest;
-      this.prepareRequestBody();
-      let requestBody: any = this.editUserRequest;
+      let requestBody: any = this.editUserRequest = editUserRequest;
       if (password != '') {
-        requestBody.username = this.editUserRequest.email;
+        requestBody.username = editUserRequest.email;
         requestBody.password = password;
       }
+      
       this.http
-      .put('http://localhost:8000/users/', requestBody)
+      .put(environment.apiUrl + EndpointPaths.USERS, requestBody)
       .subscribe(
         (res) => {
         this.updateLoggedUser();
@@ -47,36 +49,13 @@ import { Utils } from "../utils/utils";
 
     }
 
-    private prepareRequestBody() {
-      if(this.editUserRequest.email == '') {
-        this.editUserRequest.email =  this.loggedUser.email;
-      }
-
-      if (this.editUserRequest.birth_date == null) {
-        this.editUserRequest.birth_date = this.loggedUser.birth_date;
-      }
-      else {
-        this.editUserRequest.birth_date = Utils.parseDate(this.editUserRequest.birth_date);
-      }
-
-      if (this.editUserRequest.gender == null) {
-        this.editUserRequest.gender = this.loggedUser.gender;
-      }
-        
-      if (this.editUserRequest.income_range == null) {
-        this.editUserRequest.income_range = this.loggedUser.income_range;
-      }
-  
-      if (this.editUserRequest.monthly_limit == null) {
-        this.editUserRequest.monthly_limit = this.loggedUser.monthly_limit;
-      }
-    }
-
     private updateLoggedUser() {
       this.loggedUser.email = this.editUserRequest.email;
       this.loggedUser.birth_date = this.editUserRequest.birth_date;
       this.loggedUser.gender = this.editUserRequest.gender;
       this.loggedUser.income_range = this.editUserRequest.income_range;
       this.loggedUser.monthly_limit = this.editUserRequest.monthly_limit;
+      this.loggedUser.allow_data_collection = this.editUserRequest.allow_data_collection;
+      LocalStorageService.setUser(this.loggedUser);
     }
   }

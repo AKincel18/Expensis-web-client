@@ -6,4 +6,5 @@ export interface User {
     monthly_limit: number;
     income_range: number;
     date_joined: Date;
+    allow_data_collection: Boolean;
 }

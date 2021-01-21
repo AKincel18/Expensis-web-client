@@ -6,4 +6,5 @@ export interface RegisterRequest {
   monthly_limit: number;
   income_range: number;
   username: string;
+  allow_data_collection: Boolean;
 }

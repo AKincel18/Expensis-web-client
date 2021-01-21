@@ -4,4 +4,5 @@ export interface EditUserRequest {
     birth_date: Date;
     monthly_limit: number;
     income_range: number;
+    allow_data_collection: Boolean;
   }

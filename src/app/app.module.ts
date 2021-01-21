@@ -31,6 +31,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import { DeleteExpenseDialogComponent } from './app-view/expenses/dialogs/delete-expense-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatMenuModule} from '@angular/material/menu';
+
 
 export const MY_FORMATS = {
   parse: {
@@ -69,7 +72,9 @@ export const MY_FORMATS = {
     MatTableModule,
     MatProgressSpinnerModule,
     MatMomentDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule,
+    MatMenuModule
   ],
   providers: [
     {

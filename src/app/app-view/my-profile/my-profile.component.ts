@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/auth.service';
-import { IncomeRangeResponse } from 'src/app/classes/income-range-response';
 import { User } from 'src/app/classes/user';
+import { LocalStorageService } from 'src/app/local-storage.service';
 import { RepeatPasswordEStateMatcher } from 'src/app/login/login.component';
 import { IncomeRangeService } from 'src/app/services/income-range.service';
 import { MyProfileService } from 'src/app/services/my-profile.service';
@@ -23,34 +21,20 @@ export class MyProfileComponent implements OnInit {
   maxDate = new Date();
   bgClass: string;
   incomeRanges$ = this.incomeRangeService.getIncomeRanges();
-  incomeRange: string = null;
 
-  tmp = this.http
-  .get('http://localhost:8000/income-ranges/')
-  .subscribe(
-      res => {
-          let ranges = res as IncomeRangeResponse[];
-          for (let index = 0; index < ranges.length; index++) {
-              if (ranges[index].id == this.loggedUser.income_range) {
-                  this.incomeRange = `${ranges[index].range_from}-${ranges[index].range_to}`;
-              }
-          }
-      }
-  )
 
   constructor(    
     private formBuilder: FormBuilder,
-    private authService: AuthService,
     private incomeRangeService: IncomeRangeService,
-    private myProfileService: MyProfileService,
-    private http: HttpClient
+    private myProfileService: MyProfileService
     
   ) {
-    this.loggedUser = authService.getUserData();
+    this.loggedUser = LocalStorageService.getUser();
   }
 
   ngOnInit(): void {
     this.generateForm();
+    this.setFields();
   }
 
   submitMyProfile() {
@@ -58,29 +42,13 @@ export class MyProfileComponent implements OnInit {
                                       this.myProfileForm.value as User,
                                       this.myProfileForm.value.password);
   }
-
-  setEmailPlaceholder() : string {
-    return this.loggedUser.email;
-  }
-
-  setMonthlyLimitPlaceholder() : number {
-    return this.loggedUser.monthly_limit;
-  }
-
-  setGenderPlaceholder() : string {
-    if (this.loggedUser.gender == 'F') {
-      return "Female";
-    } else {
-      return "Male";
-    }
-  }
-
-  setIncomeRangePlaceholder() : string {
-    return this.incomeRange;
-  }
-
-  setDatePlaceholder() : string {
-      return Utils.parseDateToString(this.loggedUser.birth_date);
+  private setFields() {
+    this.myProfileForm.controls["email"].setValue(this.loggedUser.email);
+    this.myProfileForm.controls["birth_date"].setValue(this.loggedUser.birth_date);
+    this.myProfileForm.controls["gender"].setValue(this.loggedUser.gender);
+    this.myProfileForm.controls["income_range"].setValue(this.loggedUser.income_range);
+    this.myProfileForm.controls["monthly_limit"].setValue(this.loggedUser.monthly_limit);
+    this.myProfileForm.controls["allow_data_collection"].setValue(this.loggedUser.allow_data_collection);
   }
   
   private generateForm() {
@@ -88,15 +56,16 @@ export class MyProfileComponent implements OnInit {
       {
         email: [
           '',
-          this.customValidator(
-            /^(.+)@(.+)$/,
-            "email"
-          )
+          Validators.compose([
+            Validators.required,
+            Validators.pattern(/^(.+)@(.+)$/),
+          ]),
         ],
-        birth_date: [null, null],
-        gender: [null, null],
-        income_range: [null, null],
+        birth_date: [null, Validators.required],
+        gender: [null, Validators.required],
+        income_range: [null, Validators.required],
         monthly_limit: [null, Validators.compose([Validators.min(0)])],
+        allow_data_collection: [null, null],
         password: [
           '',
           this.customValidator(

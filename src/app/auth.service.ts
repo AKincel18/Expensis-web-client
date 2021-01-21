@@ -103,7 +103,8 @@ export class AuthService {
 
   register(registerForm: RegisterRequest, changeIdxCbk: () => void, controls: FormGroup["controls"]) {
     
-    registerForm.birth_date = Utils.parseDate(registerForm.birth_date);    registerForm.username = registerForm.email;
+    registerForm.birth_date = Utils.parseDate(registerForm.birth_date);    
+    registerForm.username = registerForm.email;
     this.http
       .post(environment.apiUrl + EndpointPaths.USERS, registerForm)
       .subscribe(
@@ -130,9 +131,6 @@ export class AuthService {
     controls["gender"].reset();
     controls["income_range"].reset();
     controls["monthly_limit"].reset();
-  }
-
-  getUserData() {
-    return this.user;
+    controls["allow_data_collection"].reset();
   }
 }

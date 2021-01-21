@@ -93,6 +93,7 @@ export class LoginComponent implements OnInit {
         gender: [null, Validators.required],
         income_range: [null, Validators.required],
         monthly_limit: [null, Validators.compose([Validators.min(0)])],
+        allow_data_collection: [null, null]
       },
       { validator: Utils.repeatPasswordValidator }
     );

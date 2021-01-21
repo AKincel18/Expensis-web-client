@@ -80,6 +80,10 @@
                   [errorStateMatcher]="passwordsMatcher"
                 />
               </mat-form-field>
+
+              <mat-checkbox formControlName = "allow_data_collection">
+                Allow data collection
+              </mat-checkbox>
               
               <button color="primary" [disabled]="registerForm.invalid" mat-raised-button (click)="submitRegister()">
                 Register
