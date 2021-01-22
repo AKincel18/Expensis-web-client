@@ -1,5 +1,4 @@
 export interface RegisterRequest {
-  //TODO: incomeScopesId
   email: string;
   password: string;
   gender: 'F' | 'M';
@@ -7,4 +6,5 @@ export interface RegisterRequest {
   monthly_limit: number;
   income_range: number;
   username: string;
+  allow_data_collection: Boolean;
 }

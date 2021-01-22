@@ -6,19 +6,29 @@
 
         <div>
             <nav mat-tab-nav-bar>
-                <a [routerLink]="link.link"
-                routerLinkActive #rla="routerLinkActive"
-                [active]="rla.isActive" 
-                mat-tab-link *ngFor="let link of links"
-                   
-                > 
-                {{link.label}} 
+                <a [routerLink]="link.link" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive"
+                    mat-tab-link *ngFor="let link of links">
+                    {{link.label}}
                 </a>
-              </nav>
+                <a [routerLink]="" [matMenuTriggerFor]="menu" mat-tab-link routerLinkActive #rla="routerLinkActive"
+                    [active]="rla.isActive">My profile</a>
+                <mat-menu #menu="matMenu">
+                    <a mat-menu-item hidden="true"></a> <!-- empty item prevents first item highlight -->
+                    <a mat-menu-item [routerLink]="myProfileLink" mat-tab-link="link">
+                        Edit profile
+                    </a>
+                    <a mat-menu-item mat-tab-link="link" (click)="onLogoutClicked()">
+                        Log out
+                    </a>
+                </mat-menu>
+
+
+            </nav>
+
         </div>
     </mat-toolbar>
 
     <router-outlet>
-        
+
     </router-outlet>
 </div>

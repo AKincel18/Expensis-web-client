@@ -20,29 +20,19 @@ import { LoginComponent } from './login/login.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { TokenInterceptor } from './token.interceptor';
 import { ExpensesComponent } from './app-view/expenses/expenses.component';
 import { MyProfileComponent } from './app-view/my-profile/my-profile.component';
 import { StatisticsComponent } from './app-view/statistics/statistics.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { DeleteExpenseDialogComponent } from './app-view/expenses/dialogs/delete-expense-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'MM/YYYY',
-  },
-  display: {
-    dateInput: 'MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent, DeleteExpenseDialogComponent],
@@ -69,7 +59,9 @@ export const MY_FORMATS = {
     MatTableModule,
     MatProgressSpinnerModule,
     MatMomentDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule,
+    MatMenuModule
   ],
   providers: [
     {
@@ -78,8 +70,7 @@ export const MY_FORMATS = {
       multi: true,
     },
     { provide: MAT_DATE_LOCALE, useValue: 'pl-PL' },
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

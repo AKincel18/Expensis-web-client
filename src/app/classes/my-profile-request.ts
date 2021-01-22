@@ -1,10 +1,8 @@
-export interface User {
-    id: number;
-    email: string; 
+export interface EditUserRequest {
+    email: string;
     gender: 'F' | 'M';
     birth_date: Date;
     monthly_limit: number;
     income_range: number;
-    date_joined: Date;
     allow_data_collection: Boolean;
-}
+  }

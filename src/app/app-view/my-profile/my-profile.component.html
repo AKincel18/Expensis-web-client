@@ -1,1 +1,69 @@
-<p>my-profile works!</p>
+<div class="container-fluid login-bg  full-height " [ngClass]="bgClass">
+  <section class="login container full-height">
+    <div class="row justify-content-center align-items-center full-height">
+      <div class="col-12 col-sm-8 login-box position-relative">
+        <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="myProfileForm" style="padding-top: 10px;" (keyup.enter)="submitMyProfile()">
+
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput type="text" formControlName="email" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Birth date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birth_date" (click)="picker.open()"
+              [min]="minDate" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select placeholder="Gender" formControlName="gender">
+              <mat-option [value]="'F'">
+                Female
+              </mat-option>
+              <mat-option [value]="'M'">
+                Male
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select placeholder="Income range" formControlName="income_range">
+              <mat-option *ngFor='let scope of incomeRanges$ | async' [value]="scope.id">
+                {{ scope.fromTo }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Monthly limit</mat-label>
+            <input matInput type="number" formControlName='monthly_limit'/>
+          </mat-form-field>
+
+          <mat-form-field class="bottom-margin">
+            <input matInput type="password" placeholder="Password" formControlName="password"
+              [errorStateMatcher]="passwordsMatcher" />
+            <mat-hint>
+              Min. 5 characters, digit and special sign.
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field class="bottom-margin">
+            <input matInput type="password" placeholder="Confirm Password" formControlName="cofirmationPassword"
+              [errorStateMatcher]="passwordsMatcher" />
+          </mat-form-field>
+
+            <mat-checkbox class="bottom-margin" formControlName = "allow_data_collection">
+              Allow data collection
+            </mat-checkbox>
+          
+
+          <button color="primary" [disabled]="myProfileForm.invalid" mat-raised-button (click)="submitMyProfile()">
+            Edit profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

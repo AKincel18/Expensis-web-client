@@ -5,7 +5,6 @@ export class EndpointPaths {
     public static readonly AUTH = 'auth/';
     public static readonly REFRESH = 'refresh/';
 
-    public static readonly AGE_RANGES = 'age-ranges/';
     public static readonly INCOME_RANGES = 'income-ranges/';
     public static readonly CATEGORIES = 'categories/';
 

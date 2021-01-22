@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { EndpointPaths } from '../endpoint-paths';
+import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { MatTabLink, MatTabNav } from '@angular/material/tabs';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-app-view',
@@ -9,16 +9,21 @@ import { EndpointPaths } from '../endpoint-paths';
   styleUrls: ['./app-view.component.scss'],
 })
 export class AppViewComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+
+  constructor(private authService: AuthService, private router: Router) {}
+  
+  @ViewChild(MatTabNav) matTabNav: MatTabNav;
+  @ViewChildren(MatTabLink) linkElements: QueryList<MatTabLink>;
+
   public links = [
     { label: 'Statistics', link: 'statistics' },
-    { label: 'Expenses', link: 'expenses' },
-    { label: 'My profile', link: 'my-profile' },
+    { label: 'Expenses', link: 'expenses' }
   ];
+  myProfileLink = 'my-profile';
 
-  ngOnInit(): void {
-    this.http
-      .get(environment.apiUrl + EndpointPaths.AGE_RANGES)
-      .subscribe((res) => console.log(res));
+  onLogoutClicked(){
+    this.authService.logout();
   }
+
+  ngOnInit(): void {}
 }

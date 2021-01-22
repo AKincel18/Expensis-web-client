@@ -19,8 +19,8 @@ import {
 } from '../classes/income-range-response';
 import { environment } from 'src/environments/environment';
 import { EndpointPaths } from '../endpoint-paths';
-import { LocalStorageService as LocalStorage } from '../local-storage.service';
-
+import { LocalStorageService as LocalStorage } from '../local-storage.service';import { Utils } from '../utils/utils';
+import { IncomeRangeService } from '../services/income-range.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -37,23 +37,13 @@ export class LoginComponent implements OnInit {
   currentTabIdx = 0;
   minDate = new Date(1900, 0, 0);
   maxDate = new Date();
-  incomeRanges$ = this.http.get(environment.apiUrl + EndpointPaths.INCOME_RANGES).pipe(
-    map((ranges: IncomeRangeResponse[]) =>
-      ranges.map(
-        (r) =>
-          ({
-            id: r.id,
-            fromTo: `${r.range_from}-${r.range_to}`,
-          } as IncomeRangeOption)
-      )
-    )
-  );
-
+  incomeRanges$ = this.incomeRangeService.getIncomeRanges();
   constructor(
     private http: HttpClient,
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private incomeRangeService: IncomeRangeService,
   ) {}
 
   submitLogin() {
@@ -103,8 +93,9 @@ export class LoginComponent implements OnInit {
         gender: [null, Validators.required],
         income_range: [null, Validators.required],
         monthly_limit: [null, Validators.compose([Validators.min(0)])],
+        allow_data_collection: [false, null]
       },
-      { validator: RepeatPasswordValidator }
+      { validator: Utils.repeatPasswordValidator }
     );
   }
 }
@@ -125,10 +116,4 @@ export class RepeatPasswordEStateMatcher implements ErrorStateMatcher {
         control.parent.get('cofirmationPassword').value
     );
   }
-}
-export function RepeatPasswordValidator(group: FormGroup) {
-  const password = group.controls.password.value;
-  const passwordConfirmation = group.controls.cofirmationPassword.value;
-
-  return password === passwordConfirmation ? null : { passwordsNotEqual: true };
 }

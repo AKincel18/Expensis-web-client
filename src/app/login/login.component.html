@@ -7,7 +7,7 @@
         </h1>
         <mat-tab-group [(selectedIndex)]="currentTabIdx" dynamicHeight="true">
           <mat-tab label="Login">
-            <div fxLayout="column" fxLayoutAlign="start stretch" style="padding-top: 10px;">
+            <div fxLayout="column" fxLayoutAlign="start stretch" style="padding-top: 10px;" (keyup.enter)="submitLogin()">
               <mat-form-field>
                 <input matInput type="text" placeholder="Email" [(ngModel)]="login.email" />
               </mat-form-field>
@@ -21,33 +21,10 @@
           </mat-tab>
 
           <mat-tab label="Registration">
-            <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="registerForm" style="padding-top: 10px;">
+            <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="registerForm" style="padding-top: 10px;"  (keyup.enter)="submitRegister()">
 
               <mat-form-field>
                 <input matInput type="text" placeholder="Email" formControlName="email" />
-              </mat-form-field>
-
-              <mat-form-field>
-                <input
-                  matInput
-                  type="password"
-                  placeholder="Password"
-                  formControlName="password"
-                  [errorStateMatcher]="passwordsMatcher"
-                />
-                <mat-hint>
-                  Min. 5 characters, digit and special sign.
-                </mat-hint>
-              </mat-form-field>
-
-              <mat-form-field>
-                <input
-                  matInput
-                  type="password"
-                  placeholder="Confirm Password"
-                  formControlName="cofirmationPassword"
-                  [errorStateMatcher]="passwordsMatcher"
-                />
               </mat-form-field>
 
               <mat-form-field>
@@ -81,6 +58,33 @@
                 <input matInput type="number" placeholder="Monthly limit" formControlName='monthly_limit' />
               </mat-form-field>
 
+              <mat-form-field>
+                <input
+                  matInput
+                  type="password"
+                  placeholder="Password"
+                  formControlName="password"
+                  [errorStateMatcher]="passwordsMatcher"
+                />
+                <mat-hint>
+                  Min. 5 characters, digit and special sign.
+                </mat-hint>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input
+                  matInput
+                  type="password"
+                  placeholder="Confirm Password"
+                  formControlName="cofirmationPassword"
+                  [errorStateMatcher]="passwordsMatcher"
+                />
+              </mat-form-field>
+
+              <mat-checkbox formControlName = "allow_data_collection">
+                Allow data collection
+              </mat-checkbox>
+              
               <button color="primary" [disabled]="registerForm.invalid" mat-raised-button (click)="submitRegister()">
                 Register
               </button>

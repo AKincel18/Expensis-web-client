@@ -20,7 +20,6 @@ export class TokenInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     if (
-      req.url.includes(EndpointPaths.USERS) ||
       req.url.includes(EndpointPaths.AUTH) ||
       req.url.includes(EndpointPaths.REFRESH)
     ) {
