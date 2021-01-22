@@ -2,7 +2,7 @@
   <section class="login container full-height">
     <div class="row justify-content-center align-items-center full-height">
       <div class="col-12 col-sm-8 login-box position-relative">
-        <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="myProfileForm" style="padding-top: 10px;">
+        <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="myProfileForm" style="padding-top: 10px;" (keyup.enter)="submitMyProfile()">
 
           <mat-form-field>
             <mat-label>Email</mat-label>

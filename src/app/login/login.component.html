@@ -7,7 +7,7 @@
         </h1>
         <mat-tab-group [(selectedIndex)]="currentTabIdx" dynamicHeight="true">
           <mat-tab label="Login">
-            <div fxLayout="column" fxLayoutAlign="start stretch" style="padding-top: 10px;">
+            <div fxLayout="column" fxLayoutAlign="start stretch" style="padding-top: 10px;" (keyup.enter)="submitLogin()">
               <mat-form-field>
                 <input matInput type="text" placeholder="Email" [(ngModel)]="login.email" />
               </mat-form-field>
@@ -21,7 +21,7 @@
           </mat-tab>
 
           <mat-tab label="Registration">
-            <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="registerForm" style="padding-top: 10px;">
+            <div fxLayout="column" fxLayoutAlign="start stretch" [formGroup]="registerForm" style="padding-top: 10px;"  (keyup.enter)="submitRegister()">
 
               <mat-form-field>
                 <input matInput type="text" placeholder="Email" formControlName="email" />
