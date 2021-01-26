@@ -34,7 +34,7 @@
         </mat-form-field>
         <br>
         <mat-form-field>
-            <input matInput type="number" placeholder="Value" formControlName='value' />
+            <input matInput type="textbox" placeholder="Value" formControlName='value' twoDigitDecimalNumber/>
             <mat-error *ngIf="value.hasError('required')">Value is required</mat-error>
         </mat-form-field>
 

@@ -34,9 +34,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { AddEditExpenseDialogComponent } from './app-view/expenses/dialogs/add-edit-expense-dialog/add-edit-expense-dialog.component';
+import { TwoDigitDecimalNumberDirective } from './two-digit-decimal-number.directive';
 
 @NgModule({
-  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent, DeleteExpenseDialogComponent, AddEditExpenseDialogComponent],
+  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent, DeleteExpenseDialogComponent, AddEditExpenseDialogComponent, TwoDigitDecimalNumberDirective],
   imports: [
     BrowserModule,
     AppRoutingModule,
