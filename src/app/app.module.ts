@@ -31,13 +31,30 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { DeleteExpenseDialogComponent } from './app-view/expenses/dialogs/delete-expense-dialog/delete-expense-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
 import { AddEditExpenseDialogComponent } from './app-view/expenses/dialogs/add-edit-expense-dialog/add-edit-expense-dialog.component';
 import { TwoDigitDecimalNumberDirective } from './two-digit-decimal-number.directive';
 
+import { StatisticsHeaderComponent } from './app-view/statistics/statistics-header/statistics-header.component';
+import { StatisticsChartsComponent } from './app-view/statistics/statistics-charts/statistics-charts.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatRadioModule } from '@angular/material/radio';
+
 @NgModule({
-  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent, DeleteExpenseDialogComponent, AddEditExpenseDialogComponent, TwoDigitDecimalNumberDirective],
+  declarations: [
+    AppComponent,
+    AppViewComponent,
+    LoginComponent,
+    ExpensesComponent,
+    MyProfileComponent,
+    StatisticsComponent,
+    StatisticsHeaderComponent,
+    StatisticsChartsComponent,
+    DeleteExpenseDialogComponent,
+    AddEditExpenseDialogComponent,
+    TwoDigitDecimalNumberDirective,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -63,7 +80,10 @@ import { TwoDigitDecimalNumberDirective } from './two-digit-decimal-number.direc
     MatMomentDateModule,
     MatDialogModule,
     MatCheckboxModule,
-    MatMenuModule
+    MatMenuModule,
+    MatCheckboxModule,
+    NgxChartsModule,
+    MatRadioModule,
   ],
   providers: [
     {
@@ -75,4 +95,4 @@ import { TwoDigitDecimalNumberDirective } from './two-digit-decimal-number.direc
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
