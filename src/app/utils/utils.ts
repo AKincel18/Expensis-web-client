@@ -24,7 +24,7 @@ export abstract class Utils {
         for (const prop of Object.keys(response) ) { 
             return response[prop];
         }
-        return "Error";
+        return "Unexpected error occured! Try again later.";
     }
     
     public static repeatPasswordValidator(group: FormGroup) {

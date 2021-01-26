@@ -31,8 +31,9 @@ export class LocalStorageService {
   }
 
   public static getUser(): User {
-    return JSON.parse(localStorage.getItem(USER)) as User;
-
+    var user = JSON.parse(localStorage.getItem(USER)) as User;
+    user.date_joined = new Date(user.date_joined);
+    return user;
   }
 
   public static setUser(user: User) {

@@ -1,0 +1,47 @@
+<div class="dialog-container">
+    <h1 mat-dialog-title><strong>{{isEditDialog ? 'Edit expense' : 'Add new expense'}}</strong></h1>
+    <br>
+    <form autocomplete="off" [formGroup]="expenseForm">
+        <mat-form-field class="title">
+            <mat-label>Title</mat-label>
+            <input matInput #titleInput formControlName="title" [maxlength]="80">
+            <mat-hint align="end">{{titleInput.value.length}} / 80</mat-hint>
+            <mat-error *ngIf="title.hasError('required')">Title is required</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput #descriptionInput [maxlength]="150" formControlName="description" rows="3"></textarea>
+            <mat-hint align="end">{{descriptionInput.value.length}} / 150</mat-hint>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-label>Expense date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" (click)="picker.open()" [min]="minDate"
+                [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="date.hasError('required')">Expense date is required</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-select placeholder="Category" formControlName="category">
+                <mat-option *ngFor='let category of categories$ | async' [value]="category.id">
+                    {{ category.value }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="category.hasError('required')">Category is required</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <input matInput type="textbox" placeholder="Value" formControlName='value' twoDigitDecimalNumber/>
+            <mat-error *ngIf="value.hasError('required')">Value is required</mat-error>
+        </mat-form-field>
+
+        <br><br>
+        <div mat-dialog-actions align="end">
+            <button mat-button (click)="onCancel()">Cancel</button>
+            <button mat-button (click)="onSubmit()">Submit</button>
+        </div>
+    </form>
+</div>

@@ -29,13 +29,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { DeleteExpenseDialogComponent } from './app-view/expenses/dialogs/delete-expense-dialog.component';
+import { DeleteExpenseDialogComponent } from './app-view/expenses/dialogs/delete-expense-dialog/delete-expense-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenuModule } from '@angular/material/menu';
+import { AddEditExpenseDialogComponent } from './app-view/expenses/dialogs/add-edit-expense-dialog/add-edit-expense-dialog.component';
+import { TwoDigitDecimalNumberDirective } from './two-digit-decimal-number.directive';
 
 @NgModule({
-  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent, DeleteExpenseDialogComponent],
+  declarations: [AppComponent, AppViewComponent, LoginComponent, ExpensesComponent, MyProfileComponent, StatisticsComponent, DeleteExpenseDialogComponent, AddEditExpenseDialogComponent, TwoDigitDecimalNumberDirective],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -2,18 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { Expense } from './model/expense';
 import { ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { ExpensesService } from './expenses.service';
+import { ExpensesService } from './services/expenses.service';
 import * as moment from 'moment';
 import { FormControl } from '@angular/forms';
 import { Moment } from 'moment';
 import { MatDatepicker } from '@angular/material/datepicker';
-import { AuthService } from 'src/app/auth.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
-import { DeleteExpenseDialogComponent } from './dialogs/delete-expense-dialog.component';
+import { DeleteExpenseDialogComponent } from './dialogs/delete-expense-dialog/delete-expense-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {LocalStorageService as LocalStorage} from '../../local-storage.service'
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { AddEditExpenseDialogComponent } from './dialogs/add-edit-expense-dialog/add-edit-expense-dialog.component';
+import { Utils } from 'src/app/utils/utils';
 
 export const MY_FORMATS = {
   parse: {
@@ -69,7 +70,6 @@ export class ExpensesComponent implements OnInit {
 
   constructor(
     private expenseService: ExpensesService,
-    private authService: AuthService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar) { }
 
@@ -161,6 +161,56 @@ export class ExpensesComponent implements OnInit {
       () => {
         this.expensesSum = 0;
         this.openSnackBar("Error while getting expenses sum! Try again later.")
+      }
+    )
+  }
+
+  openAddExpenseDialog() {
+    this.dialog.open(AddEditExpenseDialogComponent, {
+      width: '600px',
+      autoFocus: false
+    }).afterClosed().subscribe(data => this.addNewExpense(data));
+  }
+
+  openEditExpenseDialog(expense: Expense) {
+    this.dialog.open(AddEditExpenseDialogComponent, {
+      width: '600px',
+      autoFocus: false,
+      data: expense
+    }).afterClosed().subscribe(data => this.editExpense(data));
+  }
+
+  editExpense(data: any): void {
+    if (data == null) {
+      return;
+    }
+    let expense = data["data"] as Expense;
+    expense.date = Utils.parseDate(expense.date); 
+    this.expenseService.putExpense(expense).subscribe(
+      () => {
+        this.openSnackBar("Expense edited successfully!");
+        this.getPaginatedExpenses();
+      }, 
+      error => {
+        this.openSnackBar(error.error);
+      }
+    )
+  }
+
+
+  addNewExpense(data: any) {
+    if (data == null) {
+      return;
+    }
+    let expense = data["data"] as Expense;
+    expense.date = Utils.parseDate(expense.date); 
+    this.expenseService.postExpense(expense).subscribe(
+      () => {
+        this.openSnackBar("Expense created successfully!");
+        this.getPaginatedExpenses();
+      }, 
+      error => {
+        this.openSnackBar(error.error);
       }
     )
   }

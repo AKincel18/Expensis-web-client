@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Expense } from './model/expense';
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { Expense } from '../model/expense';
 import { environment } from 'src/environments/environment';
 import { EndpointPaths } from 'src/app/endpoint-paths';
 import { catchError, retry } from 'rxjs/operators';
@@ -15,13 +15,9 @@ export class ExpensesService {
 
   constructor(private http: HttpClient) { }
 
-  httpHeader = new HttpHeaders({
-    'Content-Type': 'application/json'
-  });
-
   getExpensesList(pageSize: number, pageIndex: number, year: number, month: number, title?: string) {
     let params = this.getExpenseListParams(pageSize, pageIndex, year, month, title);
-    return this.http.get<Expense[]>(environment.apiUrl + EndpointPaths.EXPENSES, { params: params, observe: 'response' }).pipe(retry(1), catchError(this.errorHandler));
+    return this.http.get<Expense[]>(environment.apiUrl + EndpointPaths.EXPENSES, { params: params, observe: 'response' }).pipe(retry(1));
   }
 
   private getExpenseListParams(pageSize: number, pageIndex: number, year: number, month: number, title?: string) {
@@ -39,30 +35,26 @@ export class ExpensesService {
   }
 
   deleteExpense(id: number) {
-    return this.http.delete(environment.apiUrl + EndpointPaths.EXPENSES + id + '/').pipe(retry(1), catchError(this.errorHandler));
+    return this.http.delete(environment.apiUrl + EndpointPaths.EXPENSES + id + '/').pipe(retry(1));
+  }
+
+  postExpense(expense: Expense) {
+    return this.http.post(environment.apiUrl + EndpointPaths.EXPENSES, expense).pipe(retry(1));
+  }
+
+  putExpense(expense: Expense) {
+    return this.http.put(environment.apiUrl + EndpointPaths.EXPENSES + expense.id + '/', expense).pipe(retry(1));
   }
 
   getExpensesSum(year: number, month: number) {
     let params = new HttpParams()
       .set('year', String(year))
       .set('month', String(month));
-    return this.http.get<number>(environment.apiUrl + EndpointPaths.EXPENSES_SUM, {params: params}).pipe(retry(1), catchError(this.errorHandler));
-  }
-
-  errorHandler(error) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(error.status);
+    return this.http.get<number>(environment.apiUrl + EndpointPaths.EXPENSES_SUM, {params: params}).pipe(retry(1));
   }
 
   getCurrentMaxResults() {
     return this.currentMaxResults;
   }
+  
 }
