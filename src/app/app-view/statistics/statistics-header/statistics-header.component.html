@@ -17,7 +17,7 @@
                 </mat-form-field>
     
                 <ng-container *ngIf="viewType$ | async as viewType">
-                    <div class="filters" formGroupName='filters' *ngIf="viewType === 'Combined'">
+                    <div class="filters" formGroupName='filters' *ngIf="viewType === 'Combined' || viewType === 'Categories'">
                         <mat-checkbox [formControlName]='option.controlName' *ngFor='let option of filterOptions' style="margin-right: 10px;">
                             {{option.name}}
                         </mat-checkbox>

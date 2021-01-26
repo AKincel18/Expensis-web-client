@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row" *ngIf="statisticsService.statistics$ | async as stats ; else : noData" >
+    <div class="row" *ngIf="statisticsService.statistics$ | async as stats ; else : noData" style="max-height: 700px; min-height: 700px;">
         <ngx-charts-bar-vertical-2d style="fill: #ffffff;"
             [schemeType]="'ordinal'"
             [results]="stats.data"

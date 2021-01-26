@@ -37,7 +37,11 @@ export class StatisticsService {
               },
             ],
           }));
-          this.statistics$.next(view);
+          if (view.data.length == 0) {
+            this.statistics$ = new ReplaySubject();
+          } else {
+            this.statistics$.next(view);
+          }
         },
         (err) => {
           this.snackBar.open(err.message);
