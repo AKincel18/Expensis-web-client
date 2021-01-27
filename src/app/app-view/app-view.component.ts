@@ -7,9 +7,7 @@ import {
 } from '@angular/core';
 import { MatTabLink, MatTabNav } from '@angular/material/tabs';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth.service';
-import { LocalStorageService as LocalStorage } from '../local-storage.service';
 
 @Component({
   selector: 'app-app-view',
@@ -17,15 +15,7 @@ import { LocalStorageService as LocalStorage } from '../local-storage.service';
   styleUrls: ['./app-view.component.scss'],
 })
 export class AppViewComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router) {
-    let user = LocalStorage.getUser();
-    if (!user.allow_data_collection) {
-      this.links = [
-        { label: 'Expenses', link: 'expenses' },
-        { label: 'My profile', link: 'my-profile' },
-      ];
-    }
-  }
+  constructor(private authService: AuthService, private router: Router) { }
 
   @ViewChild(MatTabNav) matTabNav: MatTabNav;
   @ViewChildren(MatTabLink) linkElements: QueryList<MatTabLink>;
