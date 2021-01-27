@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="row">
+        <form (submit)='submitForm()' action="" [formGroup]=form fxLayout='row' style="width: 100%;">
+            <div class="form" fxLayout='row' fxLayoutAlign='space-between center' style="width: 100%;">
+                <mat-form-field>
+                    <mat-select formControlName='name'>
+                        <mat-option [value]="'Separated'">
+                            Separated
+                        </mat-option>
+                        <mat-option [value]="'Combined'">
+                            Combined
+                        </mat-option>
+                        <mat-option [value]="'Categories'">
+                            Categories
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+    
+                <ng-container *ngIf="viewType$ | async as viewType">
+                    <div class="filters" formGroupName='filters' *ngIf="viewType === 'Combined' || viewType === 'Categories'">
+                        <mat-checkbox [formControlName]='option.controlName' *ngFor='let option of filterOptions' style="margin-right: 10px;">
+                            {{option.name}}
+                        </mat-checkbox>
+                    </div>
+                    <div class="filters" formGroupName='filters' *ngIf="viewType === 'Separated'">
+                        <mat-radio-group formControlName='filterType'
+                            aria-labelledby="example-radio-group-label"
+                            class="example-radio-group"
+                        >
+                        <mat-radio-button class="example-radio-button" *ngFor='let option of filterOptions' [value]="option.value" style="margin-right: 10px;">
+                            {{option.name}}
+                        </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </ng-container>
+    
+                <button mat-raised-button type="submit">
+                    Apply
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -2,7 +2,7 @@
   <div class="row py-lg-5">
     <div class="col-lg-6 col-lg-6 mx-auto">
       <div class="row">
-        <div class="col">
+        <div class="col" (keyup.enter)="filterExpenses()">
           <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
             <input type="text" matInput [(ngModel)]="titleFilterInputText">

@@ -1,4 +1,10 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { MatTabLink, MatTabNav } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -9,19 +15,18 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./app-view.component.scss'],
 })
 export class AppViewComponent implements OnInit {
+  constructor(private authService: AuthService, private router: Router) { }
 
-  constructor(private authService: AuthService, private router: Router) {}
-  
   @ViewChild(MatTabNav) matTabNav: MatTabNav;
   @ViewChildren(MatTabLink) linkElements: QueryList<MatTabLink>;
 
   public links = [
     { label: 'Statistics', link: 'statistics' },
-    { label: 'Expenses', link: 'expenses' }
+    { label: 'Expenses', link: 'expenses' },
   ];
   myProfileLink = 'my-profile';
 
-  onLogoutClicked(){
+  onLogoutClicked() {
     this.authService.logout();
   }
 
