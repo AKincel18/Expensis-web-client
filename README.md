@@ -2,7 +2,7 @@
 
 Expensis is open-source project created to control Your finances.   
 This repository web client part - created using Angular 11.  
-Server application and its documentation is available [*here*](https://github.com/PKapski/Expensis-server).  
+Server application and its documentation is available [*here*](https://github.com/AKincel18/Expensis-server).  
 ## Example application views
 ### Expenses
 ![Expenses page](src/assets/expenses_view.png "Expenses page.")  
